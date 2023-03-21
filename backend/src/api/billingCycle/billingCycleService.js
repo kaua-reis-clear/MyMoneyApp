@@ -31,14 +31,14 @@ BillingCycle.route('summary', (req, res, next) => {
   })
 })
 
-BillingCycle.route("get", (req, res, next) => {
+BillingCycle.route('get', (req, res, next) => {
   BillingCycle.find({}, (err, docs) => {
-    if (!err) {
-      res.json(docs);
-    } else {
-      res.status(500).json({ errors: [err] })
-    }
-  });
-});
+      if (!err) {
+          res.json(docs)
+      } else {
+          res.status(500).json({ errors: [err] })
+      }
+  }).skip(req.query.skip).limit(req.query.limit)
+})
 
 module.exports = BillingCycle;
