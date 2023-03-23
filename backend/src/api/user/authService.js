@@ -1,4 +1,4 @@
-const _ = require("loadash");
+const _ = require("lodash");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const User = require("./user");
@@ -42,12 +42,10 @@ const signup = (req, res, next) => {
   const name = req.body.name || "";
   const email = req.body.email || "";
   const password = req.body.password || "";
-  const confirmPassword = req.body.confirmPassword || "";
-
+  const confirmPassword = req.body.confirm_password || "";
   if (!email.match(emailRegex)) {
     return res.status(400).send({ errors: ["O e-mail informa está inválido"] });
   }
-
   if (!password.match(passwordRegex)) {
     return res.status(400).send({
       errors: [
@@ -55,13 +53,11 @@ const signup = (req, res, next) => {
       ],
     });
   }
-
   const salt = bcrypt.genSaltSync();
   const passwordHash = bcrypt.hashSync(password, salt);
   if (!bcrypt.compareSync(confirmPassword, passwordHash)) {
     return res.status(400).send({ errors: ["Senhas não conferem."] });
   }
-
   User.findOne({ email }, (err, user) => {
     if (err) {
       return sendErrorsFromDB(res, err);
@@ -80,5 +76,4 @@ const signup = (req, res, next) => {
   });
 };
 
-
-module.exports = { login, signup, validateToken }
+module.exports = { login, signup, validateToken };
